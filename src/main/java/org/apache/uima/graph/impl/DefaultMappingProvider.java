@@ -20,11 +20,20 @@ public class DefaultMappingProvider implements IMappingProvider {
 	
 	public IMapping getMappingForClass(Class<?> cls) {
 		Class<?> curCls = cls;
+		
+		// serially check all implemented interfaces and superclasses (interfaces are priority)
 		while (!mappings.containsKey(curCls) && !curCls.equals(Object.class)) {
+			for (Class<?> iface : curCls.getInterfaces())
+				if (mappings.containsKey(iface))
+					return uncheckedGet(iface);
 			curCls = curCls.getSuperclass();
 		}
 		
-		IMapping result = mappings.get(curCls);
+		return uncheckedGet(curCls);
+	}
+	
+	private IMapping uncheckedGet(Class<?> key) {
+		IMapping result = mappings.get(key);
 		result.setMappingProvider(this);
 		return result;
 	}
