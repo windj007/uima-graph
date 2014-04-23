@@ -27,7 +27,8 @@ public class DefaultFeatureStructureMapping extends MappingBase {
 			return result;
 
 		result = graph.addVertex(null);
-		result.setProperty(DefaultIndicesNames.ADDR, address);
+		result.setProperty(DefaultIndicesNames.CLASS.name(), obj.getClass().getName());
+		result.setProperty(DefaultIndicesNames.ADDR.name(), address);
 		for (Feature feat : fs.getType().getFeatures())
 			GraphUtils.mapFeature(getMappingProvider(), fs, feat, graph, result);
 
