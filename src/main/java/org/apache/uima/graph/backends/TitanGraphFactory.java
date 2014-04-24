@@ -1,15 +1,10 @@
 package org.apache.uima.graph.backends;
 
-import java.io.File;
-
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
 import org.apache.uima.graph.IGraphFactory;
 import org.apache.uima.graph.impl.DefaultIndicesNames;
 
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
-import com.thinkaurelius.titan.graphdb.configuration.GraphDatabaseConfiguration;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 
@@ -51,7 +46,7 @@ public class TitanGraphFactory implements IGraphFactory {
 			Boolean.class).indexed(Vertex.class).make();
 		graph.makeKey(DefaultIndicesNames.AS_STRING.name()).dataType(
 			String.class).indexed(ES_INDEX_NAME, Vertex.class).make();
-		graph.makeKey(DefaultIndicesNames.COVERED_TEXT.name()).dataType(
+		graph.makeKey(DefaultIndicesNames.TEXT.name()).dataType(
 			String.class).indexed(ES_INDEX_NAME, Vertex.class).make();
 		graph.makeKey(DefaultIndicesNames.f_begin.name()).dataType(
 			Integer.class).indexed(ES_INDEX_NAME, Vertex.class).make();

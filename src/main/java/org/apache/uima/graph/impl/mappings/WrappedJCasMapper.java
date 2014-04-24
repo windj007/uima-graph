@@ -20,7 +20,7 @@ public class WrappedJCasMapper extends MapperBase {
 			DefaultIndicesNames.CLASS.name(),
 			obj.getClass().getName());
 		vertexForObj.setProperty(
-			DefaultIndicesNames.COVERED_TEXT.name(),
+			DefaultIndicesNames.TEXT.name(),
 			doc.getDocumentText());
 		vertexForObj.setProperty(
 			DefaultIndicesNames.LANGUAGE.name(),

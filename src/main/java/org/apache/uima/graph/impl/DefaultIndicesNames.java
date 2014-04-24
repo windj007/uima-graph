@@ -3,9 +3,9 @@ package org.apache.uima.graph.impl;
 public enum DefaultIndicesNames {
 	CLASS,
 	AS_STRING,
-	COVERED_TEXT,
+	TEXT,
 	LANGUAGE,
-	INTERSECTS_WITH,
+	COVERED,
 	FEATURE,
 	NAME,
 	CONTAINS_FS,

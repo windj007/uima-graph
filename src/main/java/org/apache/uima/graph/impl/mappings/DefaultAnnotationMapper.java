@@ -1,11 +1,10 @@
 package org.apache.uima.graph.impl.mappings;
 
-import org.apache.uima.cas.CASException;
 import org.apache.uima.cas.text.AnnotationFS;
-import org.apache.uima.graph.impl.AnnotUtils;
 import org.apache.uima.graph.impl.DefaultIndicesNames;
 import org.apache.uima.graph.impl.MappingUtils;
 import org.apache.uima.jcas.tcas.Annotation;
+import org.uimafit.util.JCasUtil;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -21,27 +20,21 @@ public class DefaultAnnotationMapper extends DefaultFeatureStructureMapper {
 		super.fillVertex(vertexForObj, obj, graph);
 
 		vertexForObj.setProperty(
-			DefaultIndicesNames.COVERED_TEXT.name(),
+			DefaultIndicesNames.TEXT.name(),
 			annot.getCoveredText());
 		vertexForObj.setProperty(
 			DefaultIndicesNames.IS_NULL.name(),
 			annot.getBegin() == 0 && annot.getEnd() == 0);
 
-		try {
-			for (AnnotationFS intersecting : AnnotUtils.getIntersectingAnnotations(
-				annot.getView().getJCas(),
-				annot))
-				MappingUtils.addLink(
-					getMappingManager(),
-					graph,
-					vertexForObj,
-					intersecting,
-					DefaultIndicesNames.INTERSECTS_WITH.name());
-		} catch (CASException e) {
-			throw new IllegalArgumentException(
-				"An error has occurred during getting intersecting annotations",
-				e);
-		}
+		for (AnnotationFS covered : JCasUtil.selectCovered(
+			Annotation.class,
+			annot))
+			MappingUtils.addLink(
+				getMappingManager(),
+				graph,
+				vertexForObj,
+				covered,
+				DefaultIndicesNames.COVERED.name());
 	}
 
 }
