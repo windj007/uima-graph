@@ -21,7 +21,7 @@ public class DefaultJCasMapping extends MappingBase {
 					obj.getClass()));
 
 		JCas doc = (JCas) obj;
-		int addr = doc.hashCode();
+		int addr = getAddress(doc);
 		Vertex result = GraphUtils.tryGetVertexByAddr(graph, addr);
 		if (result != null)
 			return result;
@@ -48,6 +48,10 @@ public class DefaultJCasMapping extends MappingBase {
 		}
 
 		return result;
+	}
+	
+	protected int getAddress(JCas doc) {
+		return doc.hashCode();
 	}
 
 }
