@@ -2,6 +2,7 @@ package org.apache.uima.graph.impl.mappings;
 
 import org.apache.uima.graph.impl.DefaultIndicesNames;
 import org.apache.uima.graph.impl.MappingUtils;
+import org.apache.uima.graph.impl.WrappedJCas;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.cas.TOP;
 import org.uimafit.util.JCasUtil;
@@ -9,9 +10,11 @@ import org.uimafit.util.JCasUtil;
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 
-public class DefaultJCasMapper extends MapperBase {
+public class WrappedJCasMapper extends MapperBase {
 	public void fillVertex(Vertex vertexForObj, Object obj, Graph graph) {
-		JCas doc = MappingUtils.checkTypeAndCast(getClass(), JCas.class, obj);
+		WrappedJCas wrapper = MappingUtils.checkTypeAndCast(getClass(), WrappedJCas.class, obj);
+		
+		JCas doc = wrapper.getDoc();
 		
 		vertexForObj.setProperty(
 			DefaultIndicesNames.CLASS.name(),

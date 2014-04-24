@@ -40,10 +40,8 @@ public final class MappingUtils {
 		return edge;
 	}
 
-	// it's safe because of the second check in this function
-	@SuppressWarnings("unchecked")
 	public static <T> T checkTypeAndCast(Class<? extends IMapper> mapperCls,
-		Class<?> acceptableType, Object obj) {
+		Class<? extends T> acceptableType, Object obj) {
 		if (obj == null)
 			throw new IllegalArgumentException(String.format(
 				"%s was asked to map null (object of type %s expected)",
@@ -56,6 +54,6 @@ public final class MappingUtils {
 					mapperCls.getName(),
 					acceptableType.getName(),
 					obj.getClass()));
-		return (T) obj;
+		return acceptableType.cast(obj);
 	}
 }
