@@ -23,6 +23,9 @@ public class DefaultAnnotationMapper extends DefaultFeatureStructureMapper {
 		vertexForObj.setProperty(
 			DefaultIndicesNames.COVERED_TEXT.name(),
 			annot.getCoveredText());
+		vertexForObj.setProperty(
+			DefaultIndicesNames.IS_NULL.name(),
+			annot.getBegin() == 0 && annot.getEnd() == 0);
 
 		try {
 			for (AnnotationFS intersecting : AnnotUtils.getIntersectingAnnotations(

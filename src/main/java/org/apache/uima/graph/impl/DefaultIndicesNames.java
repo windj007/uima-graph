@@ -10,5 +10,8 @@ public enum DefaultIndicesNames {
 	NAME,
 	CONTAINS_FS,
 	FOLLOWING,
-	PRECEDING
+	PRECEDING,
+	f_begin,
+	f_end,
+	IS_NULL
 }
