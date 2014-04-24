@@ -1,0 +1,61 @@
+package org.apache.uima.graph.impl;
+
+import org.apache.uima.cas.Feature;
+import org.apache.uima.cas.FeatureStructure;
+import org.apache.uima.graph.IMapper;
+import org.apache.uima.graph.IMappingManager;
+
+import com.tinkerpop.blueprints.Edge;
+import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Vertex;
+
+public final class MappingUtils {
+	public static final String	FEATURE_PREFIX				= "f_";
+	public static final String	SIMPLE_FEATURE_NULL_VALUE	= "";
+
+	private MappingUtils() {
+	}
+
+	public static void mapFeature(IMappingManager manager,
+		FeatureStructure origObj, Feature feat, Graph graph, Vertex origVertex) {
+		if (feat.getRange().isPrimitive()) {
+			String value = origObj.getFeatureValueAsString(feat);
+			if (value == null)
+				value = SIMPLE_FEATURE_NULL_VALUE;
+			origVertex.setProperty(FEATURE_PREFIX + feat.getShortName(), value);
+		} else {
+			addLink(
+				manager,
+				graph,
+				origVertex,
+				origObj.getFeatureValue(feat),
+				FEATURE_PREFIX + feat.getShortName());
+		}
+	}
+
+	public static Edge addLink(IMappingManager manager, Graph graph,
+		Vertex from, Object toObj, String label) {
+		Vertex toVertex = manager.enqueueObject(toObj);
+		Edge edge = from.addEdge(label, toVertex);
+		return edge;
+	}
+
+	// it's safe because of the second check in this function
+	@SuppressWarnings("unchecked")
+	public static <T> T checkTypeAndCast(Class<? extends IMapper> mapperCls,
+		Class<?> acceptableType, Object obj) {
+		if (obj == null)
+			throw new IllegalArgumentException(String.format(
+				"%s was asked to map null (object of type %s expected)",
+				mapperCls.getName(),
+				acceptableType.getName()));
+		if (!acceptableType.isInstance(obj))
+			throw new IllegalArgumentException(
+				String.format(
+					"%s can only map objects of subtypes of '%s', but '%s' was passed",
+					mapperCls.getName(),
+					acceptableType.getName(),
+					obj.getClass()));
+		return (T) obj;
+	}
+}

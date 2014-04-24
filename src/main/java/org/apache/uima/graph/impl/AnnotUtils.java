@@ -28,9 +28,14 @@ public final class AnnotUtils {
 			itr.moveToPrevious();
 		}
 
+		if (!itr.isValid())
+			itr.moveToFirst();
+
 		while (itr.isValid()
 			&& (itr.get().getBegin() < focusAnnotation.getEnd())) {
-			result.add(itr.get());
+			if (!itr.get().equals(focusAnnotation)
+				&& itr.get().getEnd() > focusAnnotation.getBegin())
+				result.add(itr.get());
 			itr.moveToNext();
 		}
 

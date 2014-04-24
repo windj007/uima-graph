@@ -2,7 +2,9 @@ package org.apache.uima.graph;
 
 import org.apache.uima.graph.exceptions.CannotCreateMappingProviderException;
 
-public interface IMappingProviderFactory {
-	IMappingProvider createMappingProvider()
+import com.tinkerpop.blueprints.Graph;
+
+public interface IMappingManagerFactory {
+	IMappingManager createMappingProvider(Graph graph)
 		throws CannotCreateMappingProviderException;
 }

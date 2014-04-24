@@ -12,30 +12,38 @@ import org.uimafit.factory.ConfigurationParameterFactory;
 import com.tinkerpop.blueprints.Graph;
 
 public class GraphWriter extends JCasAnnotator_ImplBase {
-	public static final String	PARAM_GRAPH_FACTORY_NAME	= ConfigurationParameterFactory.createConfigurationParameterName(
-																GraphWriter.class,
-																"graphFactoryName");
+	public static final String	PARAM_GRAPH_FACTORY_NAME		= ConfigurationParameterFactory.createConfigurationParameterName(
+																	GraphWriter.class,
+																	"graphFactoryName");
 
-	public static final String	PARAM_GRAPH_CONFIG_STRING	= ConfigurationParameterFactory.createConfigurationParameterName(
-																GraphWriter.class,
-																"graphConfigString");
+	public static final String	PARAM_GRAPH_CONFIG_STRING		= ConfigurationParameterFactory.createConfigurationParameterName(
+																	GraphWriter.class,
+																	"graphConfigString");
 
-	public static final String	PARAM_MAPPING_FACTORY_NAME	= ConfigurationParameterFactory.createConfigurationParameterName(
-																GraphWriter.class,
-																"mappingFactoryName");
+	public static final String	PARAM_MAPPING_FACTORY_NAME		= ConfigurationParameterFactory.createConfigurationParameterName(
+																	GraphWriter.class,
+																	"mappingFactoryName");
+
+	public static final String	PARAM_JCAS_WRAPPER_CLASS_NAME	= ConfigurationParameterFactory.createConfigurationParameterName(
+																	GraphWriter.class,
+																	"jcasWrapperClassName");
 
 	@ConfigurationParameter(description = "Name of factory to get from GraphMetaFactory to open connection to graph database")
-	private String				graphFactoryName			= GraphMetaFactory.DEFAULT_FACTORY_NAME;
+	private String				graphFactoryName				= GraphMetaFactory.DEFAULT_FACTORY_NAME;
 
 	@ConfigurationParameter(mandatory = true, description = "String to pass to the GraphFactory when opening connection")
-	private String				graphConfigString			= null;
+	private String				graphConfigString				= null;
 
 	@ConfigurationParameter(description = "Name of factory to get mapping")
-	private String				mappingFactoryName			= MappingProviderMetaFactory.DEFAULT_FACTORY_NAME;
+	private String				mappingFactoryName				= MappingManagerMetaFactory.DEFAULT_FACTORY_NAME;
 
-	private IGraphFactory		graphFactory				= null;
-	private Graph				workingGraph				= null;
-	private IMappingProvider	mapper						= null;
+	@ConfigurationParameter(mandatory = true, description = "Full name of IJCasWrapper implementor to instantiate to get serializable objects from JCas")
+	private String				jcasWrapperClassName			= null;
+
+	private IGraphFactory		graphFactory					= null;
+	private Graph				workingGraph					= null;
+	private IMappingManager		mapper							= null;
+	private IJCasWrapper		jcasWrapper						= null;
 
 	@Override
 	public void initialize(UimaContext context)
@@ -43,11 +51,19 @@ public class GraphWriter extends JCasAnnotator_ImplBase {
 		super.initialize(context);
 
 		try {
+			Class<?> aCls = Class.forName(jcasWrapperClassName);
+			Class<? extends IJCasWrapper> wrapperCls = aCls.asSubclass(IJCasWrapper.class);
+			jcasWrapper = wrapperCls.newInstance();
+		} catch (ReflectiveOperationException e) {
+			throw new ResourceInitializationException(e);
+		}
+		
+		try {
 			graphFactory = GraphMetaFactory.Instance().getFactory(
 				graphFactoryName);
 			workingGraph = graphFactory.createGraph(graphConfigString);
-			mapper = MappingProviderMetaFactory.Instance().getFactory(
-				mappingFactoryName).createMappingProvider();
+			mapper = MappingManagerMetaFactory.Instance().getFactory(
+				mappingFactoryName).createMappingProvider(workingGraph);
 		} catch (UIMAGraphExceptionBase e) {
 			throw new ResourceInitializationException(e);
 		}
@@ -55,8 +71,8 @@ public class GraphWriter extends JCasAnnotator_ImplBase {
 
 	@Override
 	public void process(JCas doc) throws AnalysisEngineProcessException {
-		IMapping mapping = mapper.getMappingForClass(doc.getClass());
-		mapping.mapToGraph(doc, workingGraph);
+		mapper.enqueueObject(jcasWrapper.wrap(doc));
+		mapper.processQueue();
 		graphFactory.commit(workingGraph);
 	}
 }

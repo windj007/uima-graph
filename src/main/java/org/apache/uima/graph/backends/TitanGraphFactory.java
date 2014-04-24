@@ -9,7 +9,6 @@ import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.graphdb.configuration.GraphDatabaseConfiguration;
 import com.tinkerpop.blueprints.Graph;
-import com.tinkerpop.blueprints.Vertex;
 
 public class TitanGraphFactory implements IGraphFactory {
 
@@ -32,7 +31,6 @@ public class TitanGraphFactory implements IGraphFactory {
 //        index.setProperty(GraphDatabaseConfiguration.STORAGE_DIRECTORY_KEY, configString + File.separator + "es");
 
 		TitanGraph graph = TitanFactory.open(config);
-		graph.makeKey(DefaultIndicesNames.ADDR.name()).dataType(Integer.class).indexed(Vertex.class).unique().make();
 		graph.makeKey(DefaultIndicesNames.AS_STRING.name()).dataType(String.class).make();
 		graph.makeKey(DefaultIndicesNames.CLASS.name()).dataType(String.class).make();
 		graph.makeKey(DefaultIndicesNames.LANGUAGE.name()).dataType(String.class).make();
