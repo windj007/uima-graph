@@ -34,7 +34,7 @@ public class DefaultAnnotationMapper extends DefaultFeatureStructureMapper {
 				graph,
 				vertexForObj,
 				covered,
-				DefaultIndicesNames.COVERED.name());
+				DefaultIndicesNames.COVERS.name());
 	}
 
 }

@@ -5,7 +5,7 @@ public enum DefaultIndicesNames {
 	AS_STRING,
 	TEXT,
 	LANGUAGE,
-	COVERED,
+	COVERS,
 	FEATURE,
 	NAME,
 	CONTAINS_FS,
