@@ -16,27 +16,19 @@ public class TitanGraphFactory implements IGraphFactory {
 	}
 
 	public Graph createGraph(String configString) {
-//		BaseConfiguration config = new BaseConfiguration();
-//		Configuration storage = config.subset(GraphDatabaseConfiguration.STORAGE_NAMESPACE);
-//		// configuring local backend
-//		storage.setProperty(
-//			GraphDatabaseConfiguration.STORAGE_BACKEND_KEY,
-//			"local");
-//		storage.setProperty(
-//			GraphDatabaseConfiguration.STORAGE_DIRECTORY_KEY,
-//			configString);
-//		// configuring elastic search index
-//		Configuration index = storage.subset(
-//			GraphDatabaseConfiguration.INDEX_NAMESPACE).subset(ES_INDEX_NAME);
-//		index.setProperty(
-//			GraphDatabaseConfiguration.INDEX_BACKEND_KEY,
-//			"elasticsearch");
-//		index.setProperty("local-mode", true);
-//		index.setProperty("client-only", false);
-//		index.setProperty(
-//			GraphDatabaseConfiguration.STORAGE_DIRECTORY_KEY,
-//			configString + File.separator + "es");
+		return createBaseGraph(configString);
+	}
 
+	public void commit(Graph graph) {
+		if (!(graph instanceof TitanGraph))
+			throw new IllegalArgumentException(
+				String.format(
+					"Can deal only with Titan graphs, but object of class '%s' was passed",
+					graph.getClass()));
+		((TitanGraph) graph).commit();
+	}
+	
+	public static TitanGraph createBaseGraph(String configString) {
 		TitanGraph graph = TitanFactory.open(configString);
 		graph.makeKey(DefaultIndicesNames.CLASS.name()).dataType(String.class).indexed(
 			Vertex.class).make();
@@ -55,14 +47,4 @@ public class TitanGraphFactory implements IGraphFactory {
 			Vertex.class).make();
 		return graph;
 	}
-
-	public void commit(Graph graph) {
-		if (!(graph instanceof TitanGraph))
-			throw new IllegalArgumentException(
-				String.format(
-					"Can deal only with Titan graphs, but object of class '%s' was passed",
-					graph.getClass()));
-		((TitanGraph) graph).commit();
-	}
-
 }
