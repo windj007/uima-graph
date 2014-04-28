@@ -2,7 +2,6 @@ package org.apache.uima.graph.impl;
 
 import org.apache.uima.cas.Feature;
 import org.apache.uima.cas.FeatureStructure;
-import org.apache.uima.graph.IMapper;
 import org.apache.uima.graph.IMappingManager;
 
 import com.tinkerpop.blueprints.Edge;
@@ -40,20 +39,19 @@ public final class MappingUtils {
 		return edge;
 	}
 
-	public static <T> T checkTypeAndCast(Class<? extends IMapper> mapperCls,
+	public static <T> T checkTypeAndCast(Class<?> mapperCls,
 		Class<? extends T> acceptableType, Object obj) {
 		if (obj == null)
 			throw new IllegalArgumentException(String.format(
-				"%s was asked to map null (object of type %s expected)",
+				"%s was asked to process null (object of type %s expected)",
 				mapperCls.getName(),
 				acceptableType.getName()));
 		if (!acceptableType.isInstance(obj))
-			throw new IllegalArgumentException(
-				String.format(
-					"%s can only map objects of subtypes of '%s', but '%s' was passed",
-					mapperCls.getName(),
-					acceptableType.getName(),
-					obj.getClass()));
+			throw new IllegalArgumentException(String.format(
+				"%s expects subclasses of '%s', but object of '%s' was passed",
+				mapperCls.getName(),
+				acceptableType.getName(),
+				obj.getClass()));
 		return acceptableType.cast(obj);
 	}
 }
