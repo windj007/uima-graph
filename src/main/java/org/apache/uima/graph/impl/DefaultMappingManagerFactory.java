@@ -11,10 +11,12 @@ import org.apache.uima.graph.IMappingManager;
 import org.apache.uima.graph.IMappingManagerFactory;
 import org.apache.uima.graph.exceptions.CannotCreateMappingProviderException;
 import org.apache.uima.graph.impl.mappings.DefaultAnnotationMapper;
+import org.apache.uima.graph.impl.mappings.DefaultFSArrayMapper;
 import org.apache.uima.graph.impl.mappings.DefaultFeatureStructureMapper;
 import org.apache.uima.graph.impl.mappings.DefaultObjectMapper;
 import org.apache.uima.graph.impl.mappings.NullMapper;
 import org.apache.uima.graph.impl.mappings.WrappedJCasMapper;
+import org.apache.uima.jcas.cas.FSArray;
 import org.apache.uima.jcas.tcas.Annotation;
 
 import com.tinkerpop.blueprints.Graph;
@@ -30,6 +32,7 @@ public class DefaultMappingManagerFactory implements IMappingManagerFactory {
 			DefaultFeatureStructureMapper.class);
 		knownMappings.put(Annotation.class, DefaultAnnotationMapper.class);
 		knownMappings.put(WrappedJCas.class, WrappedJCasMapper.class);
+		knownMappings.put(FSArray.class, DefaultFSArrayMapper.class);
 		knownMappings.put(null, NullMapper.class);
 	}
 

@@ -13,5 +13,7 @@ public enum DefaultIndicesNames {
 	PRECEDING,
 	f_begin,
 	f_end,
-	IS_NULL
+	IS_NULL,
+	HAS_ELEMENT,
+	ELEMENT_I,
 }
