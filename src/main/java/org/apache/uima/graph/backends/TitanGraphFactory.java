@@ -1,7 +1,10 @@
 package org.apache.uima.graph.backends;
 
+import org.apache.uima.UIMAFramework;
 import org.apache.uima.graph.IGraphFactory;
 import org.apache.uima.graph.impl.DefaultIndicesNames;
+import org.apache.uima.util.Level;
+import org.apache.uima.util.Logger;
 
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
@@ -11,6 +14,8 @@ import com.tinkerpop.blueprints.Vertex;
 public class TitanGraphFactory implements IGraphFactory {
 
 	public static final String	ES_INDEX_NAME	= "es";
+
+	private static Logger		logger			= UIMAFramework.getLogger(TitanGraphFactory.class);
 
 	public TitanGraphFactory() {
 	}
@@ -27,24 +32,27 @@ public class TitanGraphFactory implements IGraphFactory {
 					graph.getClass()));
 		((TitanGraph) graph).commit();
 	}
-	
+
 	public static TitanGraph createBaseGraph(String configString) {
 		TitanGraph graph = TitanFactory.open(configString);
-		graph.makeKey(DefaultIndicesNames.CLASS.name()).dataType(String.class).indexed(
-			Vertex.class).make();
-		graph.makeKey(DefaultIndicesNames.LANGUAGE.name()).dataType(
-			String.class).indexed(Vertex.class).make();
-		graph.makeKey(DefaultIndicesNames.IS_NULL.name()).dataType(
-			Boolean.class).indexed(Vertex.class).make();
-		graph.makeKey(DefaultIndicesNames.AS_STRING.name()).dataType(
-			String.class).indexed(ES_INDEX_NAME, Vertex.class).make();
-		graph.makeKey(DefaultIndicesNames.TEXT.name()).dataType(
-			String.class).indexed(ES_INDEX_NAME, Vertex.class).make();
-		graph.makeKey(DefaultIndicesNames.f_begin.name()).dataType(
-			Integer.class).indexed(ES_INDEX_NAME, Vertex.class).make();
-		graph.makeKey(DefaultIndicesNames.f_end.name()).dataType(Integer.class).indexed(
-			ES_INDEX_NAME,
-			Vertex.class).make();
+		try {
+			graph.makeKey(DefaultIndicesNames.CLASS.name()).dataType(
+				String.class).indexed(Vertex.class).make();
+			graph.makeKey(DefaultIndicesNames.LANGUAGE.name()).dataType(
+				String.class).indexed(Vertex.class).make();
+			graph.makeKey(DefaultIndicesNames.IS_NULL.name()).dataType(
+				Boolean.class).indexed(Vertex.class).make();
+			graph.makeKey(DefaultIndicesNames.AS_STRING.name()).dataType(
+				String.class).indexed(ES_INDEX_NAME, Vertex.class).make();
+			graph.makeKey(DefaultIndicesNames.TEXT.name()).dataType(
+				String.class).indexed(ES_INDEX_NAME, Vertex.class).make();
+			graph.makeKey(DefaultIndicesNames.f_begin.name()).dataType(
+				Integer.class).indexed(ES_INDEX_NAME, Vertex.class).make();
+			graph.makeKey(DefaultIndicesNames.f_end.name()).dataType(
+				Integer.class).indexed(ES_INDEX_NAME, Vertex.class).make();
+		} catch (IllegalArgumentException e) {
+			logger.log(Level.WARNING, "Could not create key indices: " + e.getMessage());
+		}
 		return graph;
 	}
 }

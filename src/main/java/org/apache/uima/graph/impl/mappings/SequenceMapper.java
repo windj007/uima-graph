@@ -3,10 +3,10 @@ package org.apache.uima.graph.impl.mappings;
 import java.util.List;
 
 import org.apache.uima.cas.CASException;
+import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.graph.impl.DefaultIndicesNames;
 import org.apache.uima.graph.impl.MappingUtils;
 import org.apache.uima.jcas.tcas.Annotation;
-import org.uimafit.util.JCasUtil;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
