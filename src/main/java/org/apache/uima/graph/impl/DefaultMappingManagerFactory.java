@@ -51,6 +51,11 @@ public class DefaultMappingManagerFactory implements IMappingManagerFactory {
 
 	public synchronized IMappingManager createMappingProvider(Graph graph)
 		throws CannotCreateMappingProviderException {
+		return createMappingProviderImpl(graph);
+	}
+
+	protected DefaultMappingManager createMappingProviderImpl(Graph graph)
+		throws CannotCreateMappingProviderException {
 		try {
 			DefaultMappingManager result = new DefaultMappingManager(graph);
 			for (Entry<Class<?>, Class<? extends IMapper>> mapping : knownMappings.entrySet()) {

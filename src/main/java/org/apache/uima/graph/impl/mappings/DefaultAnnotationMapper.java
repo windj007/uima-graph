@@ -1,5 +1,7 @@
 package org.apache.uima.graph.impl.mappings;
 
+import java.util.Collection;
+
 import org.apache.uima.cas.text.AnnotationFS;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.graph.impl.DefaultIndicesNames;
@@ -10,6 +12,16 @@ import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 
 public class DefaultAnnotationMapper extends DefaultFeatureStructureMapper {
+	
+	public DefaultAnnotationMapper() {
+		super();
+	}
+
+	public DefaultAnnotationMapper(Collection<String> typesNotToMap,
+		Collection<String> featuresNotToMap) {
+		super(typesNotToMap, featuresNotToMap);
+	}
+
 	@Override
 	public void fillVertex(Vertex vertexForObj, Object obj, Graph graph) {
 		Annotation annot = MappingUtils.checkTypeAndCast(
@@ -28,13 +40,16 @@ public class DefaultAnnotationMapper extends DefaultFeatureStructureMapper {
 
 		for (AnnotationFS covered : JCasUtil.selectCovered(
 			Annotation.class,
-			annot))
+			annot)) {
+			if (typesNotToMap.contains(covered.getType().getName()))
+				continue;
 			MappingUtils.addLink(
 				getMappingManager(),
 				graph,
 				vertexForObj,
 				covered,
 				DefaultIndicesNames.COVERS.name());
+		}
 	}
 
 }
