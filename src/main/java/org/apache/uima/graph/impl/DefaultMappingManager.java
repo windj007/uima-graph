@@ -66,6 +66,10 @@ public class DefaultMappingManager implements IMappingManager {
 		}
 	}
 
+	public Graph getGraph() {
+		return workingGraph;
+	}
+
 	private Class<?> findBestKey(Class<?> cls) {
 		// serially check all implemented interfaces and superclasses
 		// (interfaces are priority)
