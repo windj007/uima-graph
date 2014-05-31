@@ -12,8 +12,10 @@ import org.apache.uima.graph.impl.DummyExistenceChecker;
 import org.apache.uima.graph.impl.ReflectUtils;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
+import org.apache.uima.resource.metadata.TypeSystemDescription;
 import org.apache.uima.util.CasCopier;
 import org.apache.uima.util.Level;
+import org.apache.uima.util.TypeSystemUtil;
 
 import com.tinkerpop.blueprints.Graph;
 
@@ -82,7 +84,8 @@ public class GraphWriter extends JCasAnnotator_ImplBase {
 	public void process(JCas doc) throws AnalysisEngineProcessException {
 		try {
 			if (!existenceChecker.exists(doc, getWorkingGraph())) {
-				JCas copy = JCasFactory.createJCas();
+				TypeSystemDescription tsDesc = TypeSystemUtil.typeSystem2TypeSystemDescription(doc.getTypeSystem());
+				JCas copy = JCasFactory.createJCas(tsDesc);
 				CasCopier.copyCas(doc.getCas(), copy.getCas(), true);
 
 				mapper.enqueueObject(jcasWrapper.wrap(copy));
