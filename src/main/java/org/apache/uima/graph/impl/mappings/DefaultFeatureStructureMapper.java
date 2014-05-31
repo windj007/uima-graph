@@ -8,7 +8,6 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.cas.FeatureStructure;
 import org.apache.uima.graph.impl.DefaultIndicesNames;
 import org.apache.uima.graph.impl.MappingUtils;
-import org.apache.uima.jcas.cas.Sofa;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -18,8 +17,10 @@ public class DefaultFeatureStructureMapper extends MapperBase {
 	protected Set<String>	featuresNotToMap	= new HashSet<String>();
 
 	public DefaultFeatureStructureMapper() {
-		typesNotToMap.add(Sofa.class.getName());
+		typesNotToMap.add("uima.cas.Sofa");
+		typesNotToMap.add("org.apache.uima.jcas.cas.Sofa");
 		featuresNotToMap.add("sofa");
+		featuresNotToMap.add("sofaArray");
 	}
 
 	public DefaultFeatureStructureMapper(Collection<String> typesNotToMap,
@@ -39,7 +40,7 @@ public class DefaultFeatureStructureMapper extends MapperBase {
 			obj.getClass().getName());
 
 		for (Feature feat : fs.getType().getFeatures()) {
-			if (featuresNotToMap.contains(feat.getName())
+			if (featuresNotToMap.contains(feat.getShortName())
 				|| typesNotToMap.contains(feat.getRange().getName()))
 				continue;
 			MappingUtils.mapFeature(
