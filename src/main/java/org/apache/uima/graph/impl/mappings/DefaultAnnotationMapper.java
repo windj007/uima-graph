@@ -3,7 +3,7 @@ package org.apache.uima.graph.impl.mappings;
 import java.util.Collection;
 
 import org.apache.uima.cas.text.AnnotationFS;
-import org.apache.uima.fit.util.JCasUtil;
+import org.uimafit.util.JCasUtil;
 import org.apache.uima.graph.impl.DefaultIndicesNames;
 import org.apache.uima.graph.impl.MappingUtils;
 import org.apache.uima.jcas.tcas.Annotation;

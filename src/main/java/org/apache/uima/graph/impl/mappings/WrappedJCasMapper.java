@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.uima.fit.util.JCasUtil;
+import org.uimafit.util.JCasUtil;
 import org.apache.uima.graph.impl.DefaultIndicesNames;
 import org.apache.uima.graph.impl.MappingUtils;
 import org.apache.uima.graph.impl.WrappedJCas;

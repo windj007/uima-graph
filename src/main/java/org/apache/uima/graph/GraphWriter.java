@@ -3,9 +3,6 @@ package org.apache.uima.graph;
 import org.apache.uima.UIMAException;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
-import org.apache.uima.fit.component.JCasAnnotator_ImplBase;
-import org.apache.uima.fit.descriptor.ConfigurationParameter;
-import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.graph.exceptions.UIMAGraphExceptionBase;
 import org.apache.uima.graph.impl.DefaultJCasWrapper;
 import org.apache.uima.graph.impl.DummyExistenceChecker;
@@ -16,19 +13,33 @@ import org.apache.uima.resource.metadata.TypeSystemDescription;
 import org.apache.uima.util.CasCopier;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.TypeSystemUtil;
+import org.uimafit.component.JCasAnnotator_ImplBase;
+import org.uimafit.descriptor.ConfigurationParameter;
+import org.uimafit.factory.ConfigurationParameterFactory;
+import org.uimafit.factory.JCasFactory;
 
 import com.tinkerpop.blueprints.Graph;
 
 public class GraphWriter extends JCasAnnotator_ImplBase {
-	public static final String		PARAM_GRAPH_FACTORY_NAME			= "graphFactoryName";
+	public static final String		PARAM_GRAPH_FACTORY_NAME			= ConfigurationParameterFactory.createConfigurationParameterName(
+																			GraphWriter.class,
+																			"graphFactoryName");
 
-	public static final String		PARAM_GRAPH_CONFIG_STRING			= "graphConfigString";
+	public static final String		PARAM_GRAPH_CONFIG_STRING			= ConfigurationParameterFactory.createConfigurationParameterName(
+																			GraphWriter.class,
+																			"graphConfigString");
 
-	public static final String		PARAM_MAPPING_FACTORY_NAME			= "mappingFactoryName";
+	public static final String		PARAM_MAPPING_FACTORY_NAME			= ConfigurationParameterFactory.createConfigurationParameterName(
+																			GraphWriter.class,
+																			"mappingFactoryName");
 
-	public static final String		PARAM_JCAS_WRAPPER_CLASS_NAME		= "jcasWrapperClassName";
+	public static final String		PARAM_JCAS_WRAPPER_CLASS_NAME		= ConfigurationParameterFactory.createConfigurationParameterName(
+																			GraphWriter.class,
+																			"jcasWrapperClassName");
 
-	public static final String		PARAM_EXISTENCE_CHECKER_CLASS_NAME	= "existenceCheckerClassName";
+	public static final String		PARAM_EXISTENCE_CHECKER_CLASS_NAME	= ConfigurationParameterFactory.createConfigurationParameterName(
+																			GraphWriter.class,
+																			"existenceCheckerClassName");
 
 	@ConfigurationParameter(mandatory = false, description = "Name of factory to get from GraphMetaFactory to open connection to graph database")
 	private String					graphFactoryName					= GraphMetaFactory.DEFAULT_FACTORY_NAME;
