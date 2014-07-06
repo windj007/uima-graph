@@ -1,7 +1,8 @@
 package org.apache.uima.graph;
 
 import org.apache.uima.graph.backends.TitanGraphFactory;
-import org.apache.uima.graph.impl.MetaFactoryBase;
+
+import com.github.windj.utils.factories.MetaFactoryBase;
 
 public final class GraphMetaFactory extends MetaFactoryBase<IGraphFactory> {
 	public static final String		DEFAULT_FACTORY_NAME	= TitanGraphFactory.class.getName();

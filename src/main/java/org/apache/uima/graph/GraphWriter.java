@@ -17,6 +17,7 @@ import org.apache.uima.util.CasCopier;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.TypeSystemUtil;
 
+import com.github.windj.utils.factories.CannotCreateFactory;
 import com.tinkerpop.blueprints.Graph;
 
 public class GraphWriter extends JCasAnnotator_ImplBase {
@@ -77,6 +78,8 @@ public class GraphWriter extends JCasAnnotator_ImplBase {
 			mapper = mapperFactory.createMappingProvider(getWorkingGraph());
 		} catch (UIMAGraphExceptionBase e) {
 			throw new ResourceInitializationException(e);
+		} catch (CannotCreateFactory e) {
+			throw new ResourceInitializationException(e);
 		}
 	}
 
@@ -84,6 +87,8 @@ public class GraphWriter extends JCasAnnotator_ImplBase {
 	public void process(JCas doc) throws AnalysisEngineProcessException {
 		try {
 			if (!existenceChecker.exists(doc, getWorkingGraph())) {
+				getLogger().log(Level.INFO, "Serializing a doc...");
+				
 				TypeSystemDescription tsDesc = TypeSystemUtil.typeSystem2TypeSystemDescription(doc.getTypeSystem());
 				JCas copy = JCasFactory.createJCas(tsDesc);
 				CasCopier.copyCas(doc.getCas(), copy.getCas(), true);
@@ -91,6 +96,7 @@ public class GraphWriter extends JCasAnnotator_ImplBase {
 				mapper.enqueueObject(jcasWrapper.wrap(copy));
 				mapper.processQueue();
 				graphFactory.commit(getWorkingGraph());
+				
 				getLogger().log(Level.INFO, "Doc serialized");
 			}
 			// TODO: add logging for else
