@@ -49,7 +49,7 @@ public class DefaultMappingManager implements IMappingManager {
 
 	public void registerMapping(Class<?> mappedClass, IMapper mapper) {
 		if (mapper == null)
-			throw new IllegalArgumentException("Mapping cannod be null");
+			throw new IllegalArgumentException("Mapping cannot be null");
 		mappings.put(mappedClass, mapper);
 	}
 
