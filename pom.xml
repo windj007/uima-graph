@@ -16,7 +16,7 @@
   	</dependency>
   	<dependency>
   		<groupId>com.github.windj</groupId>
-  		<artifactId>java-utils</artifactId>
+  		<artifactId>windj-java-utils</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>

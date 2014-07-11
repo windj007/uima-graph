@@ -17,7 +17,7 @@ import org.apache.uima.util.CasCopier;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.TypeSystemUtil;
 
-import com.github.windj.utils.factories.CannotCreateFactory;
+import com.github.windj.utils.factories.exceptions.CannotCreateFactory;
 import com.tinkerpop.blueprints.Graph;
 
 public class GraphWriter extends JCasAnnotator_ImplBase {
