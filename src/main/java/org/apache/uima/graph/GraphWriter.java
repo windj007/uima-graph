@@ -41,6 +41,10 @@ public class GraphWriter extends JCasAnnotator_ImplBase {
 																			GraphWriter.class,
 																			"existenceCheckerClassName");
 
+	public static final String		PARAM_COMMIT_EACH_DOCS				= ConfigurationParameterFactory.createConfigurationParameterName(
+																			GraphWriter.class,
+																			"commitEachDocs");
+
 	@ConfigurationParameter(mandatory = false, description = "Name of factory to get from GraphMetaFactory to open connection to graph database")
 	private String					graphFactoryName					= GraphMetaFactory.DEFAULT_FACTORY_NAME;
 
@@ -56,17 +60,23 @@ public class GraphWriter extends JCasAnnotator_ImplBase {
 	@ConfigurationParameter(mandatory = false, description = "Full name of IExistenceChecker implementor to instantiate to check if a document needs to be written")
 	private String					existenceCheckerClassName			= DummyExistenceChecker.class.getName();
 
+	@ConfigurationParameter(mandatory = false, description = "How frequently to commit the graph")
+	private int						commitEachDocs						= 10;
+
 	private IGraphFactory			graphFactory						= null;
 	private Graph					workingGraph						= null;
 	private IMappingManagerFactory	mapperFactory						= null;
 	private IMappingManager			mapper								= null;
 	private IJCasWrapper			jcasWrapper							= null;
 	private IExistenceChecker		existenceChecker					= null;
+	private int						docsSincePreviousCommit				= 0;
 
 	@Override
 	public void initialize(UimaContext context)
 		throws ResourceInitializationException {
 		super.initialize(context);
+
+		docsSincePreviousCommit = 0;
 
 		try {
 			jcasWrapper = ReflectUtils.tryLoad(
@@ -95,13 +105,22 @@ public class GraphWriter extends JCasAnnotator_ImplBase {
 	public void process(JCas doc) throws AnalysisEngineProcessException {
 		try {
 			if (!existenceChecker.exists(doc, getWorkingGraph())) {
+				getLogger().log(Level.INFO, "Serializing the doc...");
 				TypeSystemDescription tsDesc = TypeSystemUtil.typeSystem2TypeSystemDescription(doc.getTypeSystem());
 				JCas copy = JCasFactory.createJCas(tsDesc);
 				CasCopier.copyCas(doc.getCas(), copy.getCas(), true);
 
 				mapper.enqueueObject(jcasWrapper.wrap(copy));
 				mapper.processQueue();
-				graphFactory.commit(getWorkingGraph());
+				
+				docsSincePreviousCommit++;
+				if (docsSincePreviousCommit >= commitEachDocs) {
+					getLogger().log(Level.INFO, "Committing the graph...");
+					graphFactory.commit(getWorkingGraph());
+					getLogger().log(Level.INFO, "Committed");
+					docsSincePreviousCommit = 0;
+				}
+				
 				getLogger().log(Level.INFO, "Doc serialized");
 			}
 			// TODO: add logging for else
