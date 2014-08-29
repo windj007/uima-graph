@@ -1,12 +1,13 @@
 package org.apache.uima.graph.impl.mappings;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.uima.cas.CASException;
-import org.uimafit.util.JCasUtil;
 import org.apache.uima.graph.impl.DefaultIndicesNames;
 import org.apache.uima.graph.impl.MappingUtils;
 import org.apache.uima.jcas.tcas.Annotation;
+import org.uimafit.util.JCasUtil;
 
 import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
@@ -18,6 +19,22 @@ public class SequenceMapper extends DefaultAnnotationMapper {
 
 	public SequenceMapper(Class<? extends Annotation> annotOfInterestCls,
 		Class<? extends Annotation> linkWithCls) {
+		super();
+		this.annotOfInterestCls = annotOfInterestCls;
+		this.linkWithCls = linkWithCls;
+	}
+
+	public SequenceMapper(Class<? extends Annotation> annotOfInterestCls,
+		Class<? extends Annotation> linkWithCls, boolean separateSimpleValues) {
+		super(separateSimpleValues);
+		this.annotOfInterestCls = annotOfInterestCls;
+		this.linkWithCls = linkWithCls;
+	}
+
+	public SequenceMapper(Class<? extends Annotation> annotOfInterestCls,
+		Class<? extends Annotation> linkWithCls, boolean separateSimpleValues,
+		Collection<String> typesNotToMap, Collection<String> featuresNotToMap) {
+		super(separateSimpleValues, typesNotToMap, featuresNotToMap);
 		this.annotOfInterestCls = annotOfInterestCls;
 		this.linkWithCls = linkWithCls;
 	}

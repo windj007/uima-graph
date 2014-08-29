@@ -12,14 +12,18 @@ import com.tinkerpop.blueprints.Graph;
 import com.tinkerpop.blueprints.Vertex;
 
 public class DefaultAnnotationMapper extends DefaultFeatureStructureMapper {
-	
+
 	public DefaultAnnotationMapper() {
 		super();
 	}
 
-	public DefaultAnnotationMapper(Collection<String> typesNotToMap,
-		Collection<String> featuresNotToMap) {
-		super(typesNotToMap, featuresNotToMap);
+	public DefaultAnnotationMapper(boolean separateSimpleValues) {
+		super(separateSimpleValues);
+	}
+
+	public DefaultAnnotationMapper(boolean separateSimpleValues,
+		Collection<String> typesNotToMap, Collection<String> featuresNotToMap) {
+		super(separateSimpleValues,  typesNotToMap, featuresNotToMap);
 	}
 
 	@Override

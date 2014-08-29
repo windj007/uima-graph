@@ -30,5 +30,4 @@ public class DefaultFSArrayMapper extends DefaultFeatureStructureMapper {
 			e.setProperty(DefaultIndicesNames.ELEMENT_I.name(), i);
 		}
 	}
-
 }

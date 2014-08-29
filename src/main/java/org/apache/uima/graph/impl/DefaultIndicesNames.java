@@ -8,6 +8,7 @@ public enum DefaultIndicesNames {
 	COVERS,
 	FEATURE,
 	NAME,
+	VALUE,
 	CONTAINS_FS,
 	FOLLOWING,
 	PRECEDING,

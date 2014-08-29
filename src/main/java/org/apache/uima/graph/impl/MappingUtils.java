@@ -16,19 +16,27 @@ public final class MappingUtils {
 	}
 
 	public static void mapFeature(IMappingManager manager,
-		FeatureStructure origObj, Feature feat, Graph graph, Vertex origVertex) {
+		FeatureStructure origObj, Feature feat, Graph graph, Vertex origVertex, boolean separateSimpleValues) {
+		String linkName = FEATURE_PREFIX + feat.getShortName();
 		if (feat.getRange().isPrimitive()) {
 			String value = origObj.getFeatureValueAsString(feat);
 			if (value == null)
 				value = SIMPLE_FEATURE_NULL_VALUE;
-			origVertex.setProperty(FEATURE_PREFIX + feat.getShortName(), value);
+			if (separateSimpleValues)
+				addLink(manager,
+					graph,
+					origVertex,
+					FeatureValueWrapper.wrap(feat.getName(), value),
+					linkName);
+			else
+				origVertex.setProperty(linkName, value);
 		} else {
 			addLink(
 				manager,
 				graph,
 				origVertex,
 				origObj.getFeatureValue(feat),
-				FEATURE_PREFIX + feat.getShortName());
+				linkName);
 		}
 	}
 

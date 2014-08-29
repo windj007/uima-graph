@@ -14,6 +14,7 @@ import org.apache.uima.graph.impl.mappings.DefaultAnnotationMapper;
 import org.apache.uima.graph.impl.mappings.DefaultFSArrayMapper;
 import org.apache.uima.graph.impl.mappings.DefaultFeatureStructureMapper;
 import org.apache.uima.graph.impl.mappings.DefaultObjectMapper;
+import org.apache.uima.graph.impl.mappings.FeatureValueWrapperMapper;
 import org.apache.uima.graph.impl.mappings.NullMapper;
 import org.apache.uima.graph.impl.mappings.WrappedJCasMapper;
 import org.apache.uima.jcas.cas.FSArray;
@@ -33,6 +34,9 @@ public class DefaultMappingManagerFactory implements IMappingManagerFactory {
 		knownMappings.put(Annotation.class, DefaultAnnotationMapper.class);
 		knownMappings.put(WrappedJCas.class, WrappedJCasMapper.class);
 		knownMappings.put(FSArray.class, DefaultFSArrayMapper.class);
+		knownMappings.put(
+			FeatureValueWrapper.class,
+			FeatureValueWrapperMapper.class);
 		knownMappings.put(null, NullMapper.class);
 	}
 

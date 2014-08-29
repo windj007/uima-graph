@@ -40,18 +40,24 @@ public class TitanGraphFactory implements IGraphFactory {
 				String.class).indexed(Vertex.class).make();
 			graph.makeKey(DefaultIndicesNames.LANGUAGE.name()).dataType(
 				String.class).indexed(Vertex.class).make();
+			graph.makeKey(DefaultIndicesNames.NAME.name()).dataType(
+				String.class).indexed(Vertex.class).make();
+			graph.makeKey(DefaultIndicesNames.VALUE.name()).dataType(
+				String.class).indexed(Vertex.class).make();
 			graph.makeKey(DefaultIndicesNames.IS_NULL.name()).dataType(
 				Boolean.class).indexed(Vertex.class).make();
 			graph.makeKey(DefaultIndicesNames.AS_STRING.name()).dataType(
 				String.class).indexed(ES_INDEX_NAME, Vertex.class).make();
 			graph.makeKey(DefaultIndicesNames.TEXT.name()).dataType(
 				String.class).indexed(ES_INDEX_NAME, Vertex.class).make();
-			graph.makeKey(DefaultIndicesNames.f_begin.name()).dataType(
-				Integer.class).indexed(ES_INDEX_NAME, Vertex.class).make();
-			graph.makeKey(DefaultIndicesNames.f_end.name()).dataType(
-				Integer.class).indexed(ES_INDEX_NAME, Vertex.class).make();
+			// graph.makeKey(DefaultIndicesNames.f_begin.name()).dataType(
+			// Integer.class).indexed(ES_INDEX_NAME, Vertex.class).make();
+			// graph.makeKey(DefaultIndicesNames.f_end.name()).dataType(
+			// Integer.class).indexed(ES_INDEX_NAME, Vertex.class).make();
 		} catch (IllegalArgumentException e) {
-			logger.log(Level.WARNING, "Could not create key indices: " + e.getMessage());
+			logger.log(
+				Level.WARNING,
+				"Could not create key indices: " + e.getMessage());
 		}
 		return graph;
 	}

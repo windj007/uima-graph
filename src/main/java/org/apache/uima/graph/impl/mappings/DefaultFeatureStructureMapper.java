@@ -16,15 +16,23 @@ public class DefaultFeatureStructureMapper extends MapperBase {
 	protected Set<String>	typesNotToMap		= new HashSet<String>();
 	protected Set<String>	featuresNotToMap	= new HashSet<String>();
 
+	private boolean			separateSimpleValues		= false;
+
 	public DefaultFeatureStructureMapper() {
+		this(false);
+	}
+
+	public DefaultFeatureStructureMapper(boolean separateSimpleValues) {
+		this.separateSimpleValues = separateSimpleValues;
 		typesNotToMap.add("uima.cas.Sofa");
 		typesNotToMap.add("org.apache.uima.jcas.cas.Sofa");
 		featuresNotToMap.add("sofa");
 		featuresNotToMap.add("sofaArray");
 	}
 
-	public DefaultFeatureStructureMapper(Collection<String> typesNotToMap,
-		Collection<String> featuresNotToMap) {
+	public DefaultFeatureStructureMapper(boolean separateSimpleValues,
+		Collection<String> typesNotToMap, Collection<String> featuresNotToMap) {
+		this.separateSimpleValues = separateSimpleValues;
 		this.typesNotToMap.addAll(typesNotToMap);
 		this.featuresNotToMap.addAll(featuresNotToMap);
 	}
@@ -48,7 +56,8 @@ public class DefaultFeatureStructureMapper extends MapperBase {
 				fs,
 				feat,
 				graph,
-				vertexForObj);
+				vertexForObj,
+				separateSimpleValues);
 		}
 	}
 }
