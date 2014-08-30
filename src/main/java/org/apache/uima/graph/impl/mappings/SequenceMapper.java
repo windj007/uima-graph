@@ -18,23 +18,28 @@ public class SequenceMapper extends DefaultAnnotationMapper {
 	private Class<? extends Annotation>	linkWithCls			= null;
 
 	public SequenceMapper(Class<? extends Annotation> annotOfInterestCls,
-		Class<? extends Annotation> linkWithCls) {
+			Class<? extends Annotation> linkWithCls) {
 		super();
 		this.annotOfInterestCls = annotOfInterestCls;
 		this.linkWithCls = linkWithCls;
 	}
 
 	public SequenceMapper(Class<? extends Annotation> annotOfInterestCls,
-		Class<? extends Annotation> linkWithCls, boolean separateSimpleValues) {
-		super(separateSimpleValues);
+			Class<? extends Annotation> linkWithCls,
+			boolean separateSimpleValues,
+			boolean mapCovered) {
+		super(separateSimpleValues, mapCovered);
 		this.annotOfInterestCls = annotOfInterestCls;
 		this.linkWithCls = linkWithCls;
 	}
 
 	public SequenceMapper(Class<? extends Annotation> annotOfInterestCls,
-		Class<? extends Annotation> linkWithCls, boolean separateSimpleValues,
-		Collection<String> typesNotToMap, Collection<String> featuresNotToMap) {
-		super(separateSimpleValues, typesNotToMap, featuresNotToMap);
+			Class<? extends Annotation> linkWithCls,
+			boolean separateSimpleValues,
+			Collection<String> typesNotToMap,
+			Collection<String> featuresNotToMap,
+			boolean mapCovered) {
+		super(separateSimpleValues, typesNotToMap, featuresNotToMap, mapCovered);
 		this.annotOfInterestCls = annotOfInterestCls;
 		this.linkWithCls = linkWithCls;
 	}
@@ -47,36 +52,46 @@ public class SequenceMapper extends DefaultAnnotationMapper {
 			return;
 
 		Annotation annot = MappingUtils.checkTypeAndCast(
-			getClass(),
-			Annotation.class,
-			obj);
+				getClass(),
+				Annotation.class,
+				obj);
 		try {
-			linkFirst(graph, vertexForObj, JCasUtil.selectFollowing(
-				annot.getView().getJCas(),
-				linkWithCls,
-				annot,
-				1), DefaultIndicesNames.FOLLOWING.name());
-			linkFirst(graph, vertexForObj, JCasUtil.selectPreceding(
-				annot.getView().getJCas(),
-				linkWithCls,
-				annot,
-				1), DefaultIndicesNames.PRECEDING.name());
+			linkFirst(
+					graph,
+					vertexForObj,
+					JCasUtil.selectFollowing(
+							annot.getView().getJCas(),
+							linkWithCls,
+							annot,
+							1),
+					DefaultIndicesNames.FOLLOWING.name());
+			linkFirst(
+					graph,
+					vertexForObj,
+					JCasUtil.selectPreceding(
+							annot.getView().getJCas(),
+							linkWithCls,
+							annot,
+							1),
+					DefaultIndicesNames.PRECEDING.name());
 		} catch (CASException e) {
 			throw new IllegalArgumentException(
-				"An error has occurred during getting preceding and following annotations",
-				e);
+					"An error has occurred during getting preceding and following annotations",
+					e);
 		}
 	}
 
-	protected void linkFirst(Graph graph, Vertex vertexForObj,
-		List<? extends Annotation> annots, String linkLabel) {
+	protected void linkFirst(Graph graph,
+			Vertex vertexForObj,
+			List<? extends Annotation> annots,
+			String linkLabel) {
 		if (annots.isEmpty())
 			return;
 		MappingUtils.addLink(
-			getMappingManager(),
-			graph,
-			vertexForObj,
-			annots.get(0),
-			linkLabel);
+				getMappingManager(),
+				graph,
+				vertexForObj,
+				annots.get(0),
+				linkLabel);
 	}
 }

@@ -108,20 +108,15 @@ public class GraphWriter extends JCasAnnotator_ImplBase {
 	public void process(JCas doc) throws AnalysisEngineProcessException {
 		try {
 			if (!existenceChecker.exists(doc, getWorkingGraph())) {
-<<<<<<< HEAD
-				getLogger().log(Level.INFO, "Serializing the doc...");
-=======
 				getLogger().log(Level.INFO, "Serializing a doc...");
 				
->>>>>>> 9ae1f71d6ce9990b1d04a24bad81f446492efff1
 				TypeSystemDescription tsDesc = TypeSystemUtil.typeSystem2TypeSystemDescription(doc.getTypeSystem());
 				JCas copy = JCasFactory.createJCas(tsDesc);
 				CasCopier.copyCas(doc.getCas(), copy.getCas(), true);
 
 				mapper.enqueueObject(jcasWrapper.wrap(copy));
 				mapper.processQueue();
-<<<<<<< HEAD
-				
+
 				docsSincePreviousCommit++;
 				if (docsSincePreviousCommit >= commitEachDocs) {
 					getLogger().log(Level.INFO, "Committing the graph...");
@@ -129,9 +124,6 @@ public class GraphWriter extends JCasAnnotator_ImplBase {
 					getLogger().log(Level.INFO, "Committed");
 					docsSincePreviousCommit = 0;
 				}
-=======
-				graphFactory.commit(getWorkingGraph());
->>>>>>> 9ae1f71d6ce9990b1d04a24bad81f446492efff1
 				
 				getLogger().log(Level.INFO, "Doc serialized");
 			}
