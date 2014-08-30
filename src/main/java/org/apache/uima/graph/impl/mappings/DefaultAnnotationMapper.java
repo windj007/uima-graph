@@ -13,10 +13,17 @@ import com.tinkerpop.blueprints.Vertex;
 
 public class DefaultAnnotationMapper extends DefaultFeatureStructureMapper {
 
+<<<<<<< HEAD
+=======
+	private boolean	mapCovered;
+
+>>>>>>> 9ae1f71d6ce9990b1d04a24bad81f446492efff1
 	public DefaultAnnotationMapper() {
 		super();
+		mapCovered = true;
 	}
 
+<<<<<<< HEAD
 	public DefaultAnnotationMapper(boolean separateSimpleValues) {
 		super(separateSimpleValues);
 	}
@@ -24,6 +31,12 @@ public class DefaultAnnotationMapper extends DefaultFeatureStructureMapper {
 	public DefaultAnnotationMapper(boolean separateSimpleValues,
 		Collection<String> typesNotToMap, Collection<String> featuresNotToMap) {
 		super(separateSimpleValues,  typesNotToMap, featuresNotToMap);
+=======
+	public DefaultAnnotationMapper(Collection<String> typesNotToMap,
+		Collection<String> featuresNotToMap, boolean mapCovered) {
+		super(typesNotToMap, featuresNotToMap);
+		this.mapCovered = mapCovered;
+>>>>>>> 9ae1f71d6ce9990b1d04a24bad81f446492efff1
 	}
 
 	@Override
@@ -42,17 +55,19 @@ public class DefaultAnnotationMapper extends DefaultFeatureStructureMapper {
 			DefaultIndicesNames.IS_NULL.name(),
 			annot.getBegin() == 0 && annot.getEnd() == 0);
 
-		for (AnnotationFS covered : JCasUtil.selectCovered(
-			Annotation.class,
-			annot)) {
-			if (typesNotToMap.contains(covered.getType().getName()))
-				continue;
-			MappingUtils.addLink(
-				getMappingManager(),
-				graph,
-				vertexForObj,
-				covered,
-				DefaultIndicesNames.COVERS.name());
+		if (mapCovered) {
+			for (AnnotationFS covered : JCasUtil.selectCovered(
+				Annotation.class,
+				annot)) {
+				if (typesNotToMap.contains(covered.getType().getName()))
+					continue;
+				MappingUtils.addLink(
+					getMappingManager(),
+					graph,
+					vertexForObj,
+					covered,
+					DefaultIndicesNames.COVERS.name());
+			}
 		}
 	}
 

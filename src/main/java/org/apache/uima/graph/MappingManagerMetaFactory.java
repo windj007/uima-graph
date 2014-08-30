@@ -1,7 +1,8 @@
 package org.apache.uima.graph;
 
 import org.apache.uima.graph.impl.DefaultMappingManagerFactory;
-import org.apache.uima.graph.impl.MetaFactoryBase;
+
+import com.github.windj.utils.factories.MetaFactoryBase;
 
 public final class MappingManagerMetaFactory extends
 	MetaFactoryBase<IMappingManagerFactory> {

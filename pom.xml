@@ -14,6 +14,11 @@
   		<artifactId>titan-all</artifactId>
   		<version>0.4.4</version>
   	</dependency>
+  	<dependency>
+  		<groupId>com.github.windj</groupId>
+  		<artifactId>windj-java-utils</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
   </dependencies>
   <build>
     <plugins>
